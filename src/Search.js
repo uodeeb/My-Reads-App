@@ -1,13 +1,21 @@
 import React, {Component } from 'react';
 import {Link} from 'react-router-dom'
+import Book from './Book'
+import ToggleShelf from './ToggleShelf'
 class Search extends Component {
     state = {  }
     render() { 
-        let {showSearchPage, updateQuery, query}=this.props
+        let {books, showSearchPage, updateQuery, query, closeSearch, getBooks}=this.props
+        console.log(getBooks)
         return ( 
             <div className="search-books">
             <div className="search-books-bar">
-              <Link  to="/" className="close-search" onClick={() => this.props.setState({ showSearchPage: false })}>Close</Link>
+              <Link  
+              to="/" 
+              className="close-search" 
+              onClick={()=> this.closeSearch()}
+              >Close
+              </Link>
               <div className="search-books-input-wrapper">
                 {/*
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -21,14 +29,33 @@ class Search extends Component {
                 type="text" 
                 placeholder="Search by title or author"
                 value={query}
-                onChange={(event)=> updateQuery(event.target.value)}
+                onChange={(event)=> this.props.updateQuery(event.target.value)}
                 
                 />
 
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ol className="books-grid">
+              {getBooks.map((book, i)=>(
+    
+                <li 
+    
+                key={i}
+                className="book-grid-item"
+        
+                >
+                    <div className="book-top">
+                        <div className="book-cover" 
+                        style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}>
+                        </div>
+                        <ToggleShelf />
+                        </div>
+                    <div className="book-title">{book.title}</div>
+                <div className="book-authors">{book.authors}</div>
+                </li>  
+        ))}
+              </ol>
             </div>
           </div>
          )

@@ -22,6 +22,7 @@ class BooksApp extends React.Component {
     BooksAPI.getAll().then(books =>{
       this.setState({books})
     })
+    this.updateQuery()
   }
   // this will update the query from api
   updateQuery = (query)=>{
@@ -47,8 +48,13 @@ class BooksApp extends React.Component {
     }
   }
 
+// close search page func
+closeSearch = () => {
+  this.setState({ showSearchPage: false })
+}
   render() {
-    let {showSearchPage, updateQuery, query}=this.state
+
+    const {books, showSearchPage, updateQuery, query, closeSearch, getBooks}=this.state
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -56,7 +62,11 @@ class BooksApp extends React.Component {
            <Search 
            showSearchPage={showSearchPage}
            updateQuery={this.updateQuery} 
-           query={query} />
+           query={query} 
+           closeSearch={this.closeSearch}
+           getBooks={getBooks}
+           books={books}
+           />
           )} 
           />
           
