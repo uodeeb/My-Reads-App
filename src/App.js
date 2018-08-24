@@ -25,6 +25,11 @@ class BooksApp extends React.Component {
     this.updateQuery()
     //this.shelfGet()
   }
+  // will mount func
+  //WARNING! To be deprecated in React v17. Use componentDidMount instead.
+  //componentWillMount() {
+    //this.shelfUpdate()
+  //}
   // this will update the query from api
   updateQuery = (query)=>{
     this.setState({query: query})
@@ -58,8 +63,8 @@ shelfGet = (name)=>{
   return this.state.books.filter((book) => book.shelf === name)
 }
 
-changeShelf = (book, newShelf) => {
-  BooksAPI.update(book, newShelf).then(() => {
+shelfUpdate = (book, shelf) => {
+  /*BooksAPI.update(book, newShelf).then(() => {
       // Update the local copy of the book
       book.shelf = newShelf;
 
@@ -68,12 +73,30 @@ changeShelf = (book, newShelf) => {
       this.setState(state => ({
           books: state.books.filter(b => b.id !== book.id).concat([ book ])
       }));
-  });
-};
+  });*/
+  let books;
+  if(this.state.books.findIndex(b=> b.id === book.id)> 0){
+    books=this.state.books.map(b=>{
+      if(b.id === book.id){
+return {...book, shelf}
+      }else{
+        return b
+      }
+    })
+
+  }else{
+    books=[...this.state.books, {...book, shelf}]
+  }
+  this.setState({books})
+  BooksAPI.update(book, shelf)
+  .then((data)=>{
+
+  })
+}
 ////////////////////
   render() {
 
-    const {books, showSearchPage, updateQuery, query, closeSearch, getBooks}=this.state
+    const {books, showSearchPage, updateQuery, query, closeSearch, getBooks, shelfUpdate}=this.state
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -102,18 +125,21 @@ changeShelf = (book, newShelf) => {
                books={this.shelfGet("currentlyReading")}
                //books={books}
                 shelfGet={this.shelfGet}
+                onShelfUpdate={(book, shelf)=>this.shelfUpdate(book, shelf)}
                />
                <Shelf 
                title="Want to Read"
                books={this.shelfGet("wantToRead")}
                //books={books}
                shelfGet={this.shelfGet}
+               onShelfUpdate={(book, shelf)=>this.shelfUpdate(book, shelf)}
                />
                <Shelf 
                title="Read"
                books={this.shelfGet("read")}
                //books={books}
                shelfGet={this.shelfGet}
+               onShelfUpdate={(book, shelf)=>this.shelfUpdate(book, shelf)}
                />
               </div>
             </div>

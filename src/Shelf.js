@@ -3,7 +3,7 @@ import Book from './Book'
 class Shelf extends Component {
     state = {  }
     render() { 
-      const {books, shelfGet, title}=this.props
+      const {books, shelfGet, title, onShelfUpdate}=this.props
         return (
             <div className="bookshelf">
                   <h2 className="bookshelf-title">{title}</h2>
@@ -14,6 +14,7 @@ class Shelf extends Component {
                       shelfGet={shelfGet} 
                       key={book.id}
                       book={book}
+                      onBookUpdate={(book, shelf)=>this.props.onShelfUpdate(book, shelf)}
                       />
                     ))} 
                    
