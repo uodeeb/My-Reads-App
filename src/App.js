@@ -143,7 +143,7 @@ shelfUpdate = (book, shelf) => {
 }
 
 // add proptype 
-App.propTypes = {
+BooksApp.propTypes = {
   showSearchPage: PropTypes.bool,
     books: PropTypes.array,
     query: PropTypes.string,
