@@ -31,12 +31,14 @@ class BooksApp extends React.Component {
       BooksAPI.search(query).then(response =>{
         if(response.length){
           getBooks= response.map(book =>{
-            const i =this.state.books.findIndex(key => key.id === book.id)
+            if(query === this.state.query) {
+              const i =this.state.books.findIndex(key => key.id === book.id)
+              book.shelf= 'none'
             if(i > 0){
               return this.state.books[i]
             }else{
               return book
-            }
+            }}
           })
         }
         this.setState({getBooks})
@@ -84,7 +86,11 @@ shelfUpdate = (book, shelf) => {
 
 //main render func
   render() {
-
+    const shelves = {
+      currentlyReading: ['Currently Reading', 'currentlyReading'],
+      wantToRead: ['Want to Read', 'wantToRead'],
+      read: ['Read', 'read']
+    }
     const {books, showSearchPage, query,getBooks}=this.state
     return (
       <div className="app">
@@ -108,28 +114,19 @@ shelfUpdate = (book, shelf) => {
               <div className="list-books-title">
                 <h1>MyReads</h1>
               </div>
+              {  
               <div className="list-books-content">
-                  <div>
-                      <Shelf 
-                          title="Currently Reading"
-                          books={this.shelfGet("currentlyReading")}
-                          shelfGet={this.shelfGet}
-                          onShelfUpdate={(book, shelf)=>this.shelfUpdate(book, shelf)}
-                      />
-                      <Shelf 
-                          title="Want to Read"
-                          books={this.shelfGet("wantToRead")} 
-                          shelfGet={this.shelfGet}
-                          onShelfUpdate={(book, shelf)=>this.shelfUpdate(book, shelf)}
-                      />
-                      <Shelf 
-                          title="Read"
-                          books={this.shelfGet("read")}
-                          shelfGet={this.shelfGet}
-                          onShelfUpdate={(book, shelf)=>this.shelfUpdate(book, shelf)}
-                      />
-                  </div>
+                { Object.keys(shelves).map((shelf) =>
+                  <Shelf key={shelf}
+                    shelf={shelves[shelf][1]}
+                    title={shelves[shelf][0]}
+                    books={this.shelfGet(shelf)}
+                    shelfGet={this.shelfGet}
+                    onShelfUpdate={(book, shelf)=>this.shelfUpdate(book, shelf)}
+                  />
+                )}
               </div>
+            }
             <div className="open-search">
               <Link to="/search" onClick={() => this.setState({ showSearchPage: true })}>Add a book</Link>
             </div>

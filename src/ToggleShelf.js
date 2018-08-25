@@ -31,7 +31,7 @@ shelfChange = (event)=>{
             <div className="book-shelf-changer">
                               <select
                               onChange={this.shelfChange}
-                              value={this.state.value}
+                              value={this.props.book.shelf}
                               >
                                 <option value="move" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
