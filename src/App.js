@@ -4,6 +4,7 @@ import {Route, Link} from 'react-router-dom'
 import Search from './Search'
 import Shelf from './Shelf'
 import './App.css'
+import PropTypes from 'prop-types'
 
 class BooksApp extends React.Component {
   state = {
@@ -141,4 +142,10 @@ shelfUpdate = (book, shelf) => {
   }
 }
 
+// add proptype 
+App.propTypes = {
+  showSearchPage: PropTypes.bool,
+    books: PropTypes.array,
+    query: PropTypes.string,
+}
 export default BooksApp
